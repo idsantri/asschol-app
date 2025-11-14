@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
-          cache: "pnpm"
+          # cache: "pnpm"
 
       - name: Install Corepack
         run: npm i -g corepack
@@ -28,8 +28,8 @@ jobs:
           corepack enable
           corepack prepare pnpm@latest --activate
 
-      - name: Ensure pnpm is installed
-        run: npm install -g pnpm
+      # - name: Ensure pnpm is installed
+      #   run: npm install -g pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
