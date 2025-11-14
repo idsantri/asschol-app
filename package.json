@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "iass-app",
+  "name": "asschol-app",
   "private": true,
   "type": "module",
   "engines": {

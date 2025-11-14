@@ -256,9 +256,6 @@ const optionsDT = computed(() => ({
         {
             title: 'Keanggotaan',
             data: 'keanggotaan',
-            // render: function (data, type, row) {
-            //     return `${row.alumni == true ? 'IASS' : 'Sidogirian'}`;
-            // },
         },
         {
             title: 'NIK',

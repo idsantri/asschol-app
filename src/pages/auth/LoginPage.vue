@@ -5,13 +5,13 @@
         <div class="tw:w-full">
             <BannerInstallPWA />
             <div class="tw:border tw:border-gray-300 tw:p-4 tw:rounded-lg bg-orange-2">
-                <div class="text-center">
-                    <q-avatar round color="" size="150px">
-                        <img alt="logo" src="/icons/icon-512x512.png" />
+                <div class="text-center q-my-md">
+                    <q-avatar round color="" size="100px">
+                        <img alt="logo" src="/logo.svg" />
                     </q-avatar>
                 </div>
 
-                <div class="tw:text-2xl text-center q-my-lg tw:font-light">Halaman Login</div>
+                <div class="tw:text-2xl text-center q-my-md tw:font-light">Halaman Login</div>
                 <form @submit.prevent="onLogin">
                     <div class="q-gutter-y-md column">
                         <q-input

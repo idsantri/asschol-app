@@ -4,8 +4,8 @@
             <q-item to="/">
                 <q-item-section>
                     <div class="text-center">
-                        <q-avatar round color="" size="100px">
-                            <img alt="logo" src="/icons/icon-512x512.png" />
+                        <q-avatar round color="" size="80px">
+                            <img alt="logo" src="/logo.svg" />
                         </q-avatar>
                     </div>
                 </q-item-section>
@@ -22,12 +22,12 @@
 </template>
 <script setup>
 import MainSideItem from './MainSideItem.vue';
-
+const env = import.meta.env;
 const master = [
     {
         icon: 'groups',
         label: 'Anggota',
-        caption: 'IASS Bangkalan',
+        caption: env.VITE_APP_INSTANCE,
         route: '/members',
         disable: false,
     },
