@@ -23,16 +23,16 @@
     <q-input
         dense
         :hint="
-            isValid(new Date(inputs.tgl_masuk))
-                ? formatDate(new Date(inputs.tgl_masuk), 'cccc, dd MMMM yyyy') +
+            isValid(new Date(inputs.tgl_masuk_pesantren))
+                ? formatDate(new Date(inputs.tgl_masuk_pesantren), 'cccc, dd MMMM yyyy') +
                   ' | ' +
-                  bacaHijri(m2h(inputs.tgl_masuk))
+                  bacaHijri(m2h(inputs.tgl_masuk_pesantren))
                 : 'Tanggal masuk pesantren'
         "
         class="q-my-sm"
         outlined
         label="Tanggal Masuk (M)"
-        v-model="inputs.tgl_masuk"
+        v-model="inputs.tgl_masuk_pesantren"
         :disable="!inputs.alumni"
         type="date"
         @change="onChangeTglMasuk"
@@ -44,7 +44,7 @@
         class="q-my-sm"
         outlined
         label="Tahun Masuk (Masehi)"
-        v-model="inputs.th_masuk"
+        v-model="inputs.th_masuk_pesantren"
         :disable="!inputs.alumni"
         :rules="[(val) => !val || (val?.length == 4 && !isNaN(val)) || '4 digit angka!']"
         error-color="negative"
@@ -109,9 +109,9 @@ watch(
 // );
 
 const onChangeTglMasuk = () => {
-    if (isValid(new Date(inputs.value.tgl_masuk))) {
-        const year = new Date(inputs.value.tgl_masuk).getFullYear();
-        inputs.value.th_masuk = year.toString();
+    if (isValid(new Date(inputs.value.tgl_masuk_pesantren))) {
+        const year = new Date(inputs.value.tgl_masuk_pesantren).getFullYear();
+        inputs.value.th_masuk_pesantren = year.toString();
     }
 };
 const onChangeTglBergabung = () => {
