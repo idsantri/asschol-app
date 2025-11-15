@@ -15,7 +15,7 @@
     <QMarkupTable class="q-ma-sm">
         <tbody>
             <tr>
-                <td>ID Alumni</td>
+                <td>ID Anggota</td>
                 <td class="flex items-center justify-between">
                     <span>{{ anggota.id }}</span>
                     <div>

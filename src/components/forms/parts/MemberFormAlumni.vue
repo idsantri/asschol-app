@@ -22,6 +22,16 @@
     <!-- MASUK PESANTREN -->
     <q-input
         dense
+        class="q-my-sm"
+        outlined
+        label="ID Santri"
+        v-model="inputs.santri_id"
+        hint="ID Santri saat masuk pesantren"
+        type="number"
+        :disable="!inputs.alumni"
+    />
+    <q-input
+        dense
         :hint="
             isValid(new Date(inputs.tgl_masuk_pesantren))
                 ? formatDate(new Date(inputs.tgl_masuk_pesantren), 'cccc, dd MMMM yyyy') +
@@ -65,7 +75,6 @@
         outlined
         label="Tanggal Bergabung (M)"
         v-model="inputs.tgl_bergabung"
-        :disable="!inputs.alumni"
         type="date"
         @change="onChangeTglBergabung"
     />
@@ -90,11 +99,19 @@ import { formatDate } from '@/utils/date-operation';
 import { bacaHijri, m2h } from '@/utils/hijri';
 
 const inputs = defineModel();
+
+const backup = { ...inputs.value };
 watch(
     () => inputs.value.alumni,
     (n, _o) => {
         if (!n) {
-            inputs.value.th_bergabung = '';
+            inputs.value.santri_id = '';
+            inputs.value.tgl_masuk_pesantren = '';
+            inputs.value.th_masuk_pesantren = '';
+        } else {
+            inputs.value.santri_id = backup.santri_id;
+            inputs.value.tgl_masuk_pesantren = backup.tgl_masuk_pesantren;
+            inputs.value.th_masuk_pesantren = backup.th_masuk_pesantren;
         }
     },
 );

@@ -5,6 +5,7 @@ export default defineStore('members', {
         members: [],
         filterKelompok: '',
         filterStatus: 'active',
+        filterAlamat: '',
         // DataTable pagination state
         datatablePagination: {
             displayStart: 0,
@@ -34,7 +35,16 @@ export default defineStore('members', {
                 return true;
             });
             // console.log('status', state.filterStatus, filterByStatus);
-            return filterByStatus;
+            // return filterByStatus;
+            const filterByAlamat = filterByStatus.filter((item) => {
+                if (!state.filterAlamat) return true;
+                const searchText = state.filterAlamat.toLowerCase();
+                const alamat1 = item.alamat_singkat?.toLowerCase();
+                const alamat2 = item.alamat_lengkap?.toLowerCase();
+                return alamat1.includes(searchText) || alamat2.includes(searchText);
+            });
+            // console.log('alamat', state.filterAlamat, filterByAlamat);
+            return filterByAlamat;
         },
 
         kelompokOptions: (state) => {
