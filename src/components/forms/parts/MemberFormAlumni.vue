@@ -6,7 +6,7 @@
             color="orange"
             :true-value="1"
             :false-value="0"
-            :label="inputs.alumni ? 'Alumni' : 'Partisipan'"
+            :label="inputs.alumni ? 'Alumni' : 'Simpatisan'"
         />
     </q-card>
 
