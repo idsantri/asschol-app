@@ -16,6 +16,14 @@ const data = [
         protected: false,
         sort: 'asc',
     },
+    {
+        url: 'account-name',
+        label: 'Nama Rekening',
+        style: 'single',
+        column: 1,
+        protected: false,
+        sort: 'asc',
+    },
     // {
     //     url: 'nama-kegiatan',
     //     label: 'Nama Kegiatan',

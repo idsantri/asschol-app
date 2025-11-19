@@ -19,7 +19,7 @@
                 <td class="flex items-center justify-between">
                     <span>{{ anggota.id }}</span>
                     <div>
-                        <span class="text-caption">Tahun bergabung: </span>
+                        <span class="text-caption">Angkatan: </span>
                         <span>{{ anggota.th_bergabung }}</span>
                     </div>
                 </td>

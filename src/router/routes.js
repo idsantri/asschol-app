@@ -44,6 +44,16 @@ export default [
                     },
                 ],
             },
+            {
+                path: 'cash-flows',
+                meta: { title: 'Arus Kas' },
+                children: [
+                    {
+                        component: () => import('../pages/cash-flows/IndexPage.vue'),
+                        path: '',
+                    },
+                ],
+            },
 
             // Wilayah
             // {

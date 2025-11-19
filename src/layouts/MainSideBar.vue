@@ -31,6 +31,13 @@ const master = [
         route: '/members',
         disable: false,
     },
+    {
+        icon: 'sym_o_account_balance_wallet',
+        label: 'Arus Kas',
+        caption: 'Keuangan Organisasi',
+        route: '/cash-flows',
+        disable: false,
+    },
 ];
 
 const _wilayah = [
