@@ -1,1 +1,0 @@
-import{A as e}from"./Api-DnNOAHI1.js";class o extends e{constructor(){super(),this.defaultConfig()}async login({login:t,password:s}){return(await this.fetchGuest("login",{method:"POST",body:JSON.stringify({login:t,password:s})})).data||!0}async logout(){return(await this.fetchAuth("logout",{method:"POST"})).data||!0}}const u=new o;export{u as A};
