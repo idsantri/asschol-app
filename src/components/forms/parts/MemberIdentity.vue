@@ -8,7 +8,9 @@
         :rules="[(val) => !isNaN(val) || 'Hanya angka!']"
         error-color="negative"
         type="number"
-        :hint="!inputs.id ? 'Kosongkan untuk pengisian otomatis' : ''"
+        :disable="!inputs.id"
+        :filled="!inputs.id"
+        :hint="!inputs.id ? 'Diisi otomatis oleh sistem. Anda bisa mengubahnya nanti.' : ''"
     />
     <q-input
         dense
