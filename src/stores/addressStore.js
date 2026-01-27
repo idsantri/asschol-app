@@ -27,7 +27,7 @@ import { defineStore } from 'pinia';
 // 	],
 // };
 
-export default defineStore('address', {
+export const useAddressStore = defineStore('address', {
     state: () => {
         return {
             provinsi: [],

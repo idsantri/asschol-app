@@ -11,6 +11,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
     // const _env = loadEnv(mode, fileURLToPath(new URL('.', import.meta.url)))
+    // eslint-disable-next-line no-undef
     const env = loadEnv(mode, process.cwd());
     // console.log(_env)
 

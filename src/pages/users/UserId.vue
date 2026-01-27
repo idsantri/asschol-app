@@ -1,5 +1,5 @@
 <template lang="">
-    <q-card class="">
+    <CardPage>
         <CardHeader
             title="Detail Pengguna"
             @on-reload="loadData"
@@ -95,17 +95,14 @@
                 </q-item>
             </q-list>
         </q-card-section>
-    </q-card>
-    <QDialog v-model="dialog">
-        <UserForm
-            @success-delete="() => $router.go(-1)"
-            @success-submit="(res) => Object.assign(user, res)"
-            :data="user"
-        />
-    </QDialog>
-    <!-- <pre>
-        {{ user }}
-    </pre> -->
+        <QDialog v-model="dialog">
+            <UserForm
+                @success-delete="() => $router.go(-1)"
+                @success-submit="(res) => Object.assign(user, res)"
+                :data="user"
+            />
+        </QDialog>
+    </CardPage>
 </template>
 <script setup>
 import CardHeader from '@/components/cards/CardHeader.vue';

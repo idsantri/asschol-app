@@ -1,5 +1,5 @@
 <template>
-    <QCard>
+    <CardPage>
         <CardHeader
             title="Detail Anggota"
             @on-reload="loadData"
@@ -51,7 +51,7 @@
                 @upload-error="null"
             />
         </QDialog>
-    </QCard>
+    </CardPage>
 </template>
 <script setup>
 import Member from '@/models/Member';

@@ -1,6 +1,7 @@
-import { fileURLToPath } from 'node:url'
-import { mergeConfig, defineConfig, configDefaults } from 'vitest/config'
-import viteConfig from './vite.config'
+/* eslint-disable no-unused-vars */
+import { fileURLToPath } from 'node:url';
+import { mergeConfig, defineConfig, configDefaults } from 'vitest/config';
+import viteConfig from './vite.config';
 
 // export default mergeConfig(
 //   viteConfig,
@@ -14,15 +15,15 @@ import viteConfig from './vite.config'
 // )
 
 export default defineConfig({
-  test: {
-    environment: 'jsdom',
-    include: [
-      'src/**/*.test.{js,ts,jsx,tsx}', // Test file JS & TS
-    ],
-    globals: true,
-    setupFiles: ['./src/models/tests/setup.js'],
-    coverage: {
-      reporter: ['text', 'json', 'html'],
+    test: {
+        environment: 'jsdom',
+        include: [
+            'src/**/*.test.{js,ts,jsx,tsx}', // Test file JS & TS
+        ],
+        globals: true,
+        setupFiles: ['./src/models/tests/setup.js'],
+        coverage: {
+            reporter: ['text', 'json', 'html'],
+        },
     },
-  },
-})
+});

@@ -1,5 +1,5 @@
 <template>
-    <q-card>
+    <CardPage>
         <CardHeader
             title="Data Pengguna"
             @on-reload="loadData"
@@ -26,14 +26,13 @@
                 </q-input>
             </template>
         </q-table>
-    </q-card>
-    <QDialog v-model="dialog">
-        <UserForm
-            @success-delete="() => $router.go(-1)"
-            @success-submit="(res) => $router.push(`/settings/users/${res.id}`)"
-        />
-    </QDialog>
-    <!-- <pre>{{ users }}</pre> -->
+        <QDialog v-model="dialog">
+            <UserForm
+                @success-delete="() => $router.go(-1)"
+                @success-submit="(res) => $router.push(`/settings/users/${res.id}`)"
+            />
+        </QDialog>
+    </CardPage>
 </template>
 <script setup>
 import CardHeader from '@/components/cards/CardHeader.vue';

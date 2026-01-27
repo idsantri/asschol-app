@@ -1,5 +1,5 @@
 <template lang="">
-    <QCard>
+    <CardPage>
         <CardHeader title="Arus Kas Organisasi" @on-reload="() => loadData(accountName)">
             <template #buttons>
                 <q-btn
@@ -81,7 +81,7 @@
                 :data-inputs="cashFlow"
             />
         </QDialog>
-    </QCard>
+    </CardPage>
 </template>
 <script setup>
 import CardHeader from '@/components/cards/CardHeader.vue';

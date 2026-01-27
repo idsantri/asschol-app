@@ -1,5 +1,5 @@
 <template>
-    <q-card>
+    <CardPage>
         <CardHeader title="Input Auto Complete" :show-reload="false" />
         <QCardSection class="q-pa-sm" style="max-width: 600px">
             <QCard bordered flat>
@@ -29,9 +29,7 @@
                 </QCardSection>
             </QCard>
         </QCardSection>
-    </q-card>
-    <!-- <pre>list model:{{ listModel }}</pre> -->
-    <!-- <pre>list data:{{ listData }}</pre> -->
+    </CardPage>
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';

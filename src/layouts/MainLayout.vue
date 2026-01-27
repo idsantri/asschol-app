@@ -14,10 +14,8 @@
         </q-drawer>
 
         <q-page-container>
-            <q-page class="q-pa-sm">
-                <!-- START HERE -->
-                <router-view :key="$route.meta.title" />
-            </q-page>
+            <!-- START HERE -->
+            <router-view :key="$route.meta.title" />
         </q-page-container>
         <MainFooter />
     </q-layout>

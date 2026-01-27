@@ -1,4 +1,11 @@
 import Api from './Api';
+import ApiCrud from './ApiCrud';
+
+class BaseAddress extends ApiCrud {
+    constructor(region) {
+        super('address/' + region);
+    }
+}
 
 class Address extends Api {
     constructor() {
@@ -24,5 +31,12 @@ class Address extends Api {
         });
         return response.data || true;
     }
+    Provinsi = new BaseAddress('provinsi');
+    Kabupaten = new BaseAddress('kabupaten');
+    Kecamatan = new BaseAddress('kecamatan');
+    Desa = new BaseAddress('desa');
 }
-export default new Address();
+const address = new Address();
+const { Provinsi, Kabupaten, Kecamatan, Desa } = address;
+export { Provinsi, Kabupaten, Kecamatan, Desa };
+export default address;

@@ -87,6 +87,11 @@ export default [
                 meta: { title: 'Pengaturan' },
                 children: [
                     {
+                        path: 'addresses',
+                        component: () => import('../pages/address/IndexAlamat.vue'),
+                        meta: { title: 'Pengaturan: Alamat' },
+                    },
+                    {
                         path: 'lists',
                         component: () => import('../pages/lists/ListsIndex.vue'),
                         meta: { title: 'Pengaturan: List' },

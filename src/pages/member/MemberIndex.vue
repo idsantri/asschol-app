@@ -1,5 +1,5 @@
 <template>
-    <q-card>
+    <CardPage>
         <CardHeader
             title="Data Anggota"
             @on-reload="loadData"
@@ -86,10 +86,10 @@
                 @draw="onDataTableDraw"
             />
         </q-card-section>
-    </q-card>
-    <QDialog v-model="dialog">
-        <MemberForm @success-submit="(res) => $router.push(`/members/${res.id}`)" />
-    </QDialog>
+        <QDialog v-model="dialog">
+            <MemberForm @success-submit="(res) => $router.push(`/members/${res.id}`)" />
+        </QDialog>
+    </CardPage>
 </template>
 
 <script setup>

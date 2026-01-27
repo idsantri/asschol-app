@@ -122,10 +122,10 @@
 </template>
 <script setup>
 import { onMounted, ref, watch } from 'vue';
-import addressStore from '@/stores/addressStore';
+import { useAddressStore } from '@/stores/addressStore';
 import Address from '@/models/Address';
 
-const alamat = addressStore();
+const alamat = useAddressStore();
 const inputs = defineModel();
 const listsProvinsi = ref([]);
 const listsKabupaten = ref([]);

@@ -85,6 +85,13 @@ const setting = [
         disable: false,
     },
     {
+        route: '/settings/addresses',
+        icon: 'location_on',
+        label: 'Alamat',
+        caption: 'Daftar Alamat',
+        disable: false,
+    },
+    {
         icon: 'manage_accounts',
         label: 'Pengaturan Pengguna',
         route: '/settings/users',
