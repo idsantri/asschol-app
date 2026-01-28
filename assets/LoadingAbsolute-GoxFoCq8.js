@@ -1,0 +1,1 @@
+import{o as t,b as s,d as o,bg as r}from"./index-B7Qu9wq8.js";const a={class:"tw:absolute tw:inset-0 tw:z-10 tw:flex tw:items-center tw:justify-center tw:backdrop-blur-[1px] tw:bg-orange-100/25"},l={__name:"LoadingAbsolute",props:{size:{type:String,default:"6em"}},setup(e){return(n,c)=>(t(),s("div",a,[o(r,{color:"orange",size:e.size},null,8,["size"])]))}};export{l as _};
