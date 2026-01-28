@@ -1,0 +1,1 @@
+import{A as s}from"./ApiCrud-BW3YWjJk.js";class e extends s{constructor(t){super(t),this.path="lists"}async getByKey(t){return this.setNotifyGet(),(await this.fetchGuest(`${this.path}/${t}`,{method:"GET"})).data||!0}}const a=new e;export{a as L};
