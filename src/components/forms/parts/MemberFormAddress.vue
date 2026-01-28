@@ -1,81 +1,35 @@
 <template lang="">
-    <q-select
-        dense
-        hint=""
-        class="q-my-sm"
-        outlined
+    <InputSelectAlamat
         label="Provinsi"
-        emit-value
-        map-options
         v-model="inputs.provinsi"
         :options="listsProvinsi"
         :loading="loadingProvinsi"
-        behavior="menu"
-        clearable
-    >
-        <template v-slot:after>
-            <q-btn dense flat icon="sync" @click="fetchProvinsi()" />
-        </template>
-    </q-select>
+        :onFetch="fetchProvinsi"
+    />
 
-    <q-select
-        dense
-        hint=""
-        class="q-my-sm"
-        outlined
+    <InputSelectAlamat
         label="Kabupaten/Kota"
-        emit-value
-        map-options
         v-model="inputs.kabupaten"
         :options="listsKabupaten"
         :loading="loadingKabupaten"
-        behavior="menu"
-        clearable
-    >
-        <template v-slot:after>
-            <q-btn dense flat icon="sync" @click="fetchKabupaten()" />
-        </template>
-    </q-select>
+        :onFetch="fetchKabupaten"
+    />
 
-    <q-select
-        dense
-        hint=""
-        class="q-my-sm"
-        outlined
+    <InputSelectAlamat
         label="Kecamatan"
-        emit-value
-        map-options
         v-model="inputs.kecamatan"
         :options="listsKecamatan"
         :loading="loadingKecamatan"
-        behavior="menu"
-        clearable
-    >
-        <template v-slot:after>
-            <q-btn dense flat icon="sync" class="block" @click="fetchKecamatan()" />
-        </template>
-    </q-select>
+        :onFetch="fetchKecamatan"
+    />
 
-    <q-select
-        dense
-        hint=""
-        class="q-my-sm"
-        outlined
-        label="Desa/Keluarahan"
-        emit-value
-        map-options
+    <InputSelectAlamat
+        label="Desa/Kelurahan"
         v-model="inputs.desa"
         :options="listsDesa"
         :loading="loadingDesa"
-        use-input=""
-        new-value-mode="add"
-        behavior="menu"
-        clearable
-    >
-        <template v-slot:after>
-            <q-btn dense flat icon="sync" @click="fetchDesa()" />
-        </template>
-    </q-select>
+        :onFetch="fetchDesa"
+    />
 
     <div class="row">
         <q-input
@@ -124,6 +78,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { useAddressStore } from '@/stores/addressStore';
 import Address from '@/models/Address';
+import InputSelectAlamat from '../inputs/InputSelectAlamat.vue';
 
 const alamat = useAddressStore();
 const inputs = defineModel();
