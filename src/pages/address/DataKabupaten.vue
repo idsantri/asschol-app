@@ -48,7 +48,7 @@ async function fetchData() {
     try {
         loading.value = true;
         const data = await Address.Kabupaten.getAll({ provinsi_id });
-        console.log('🚀 ~ fetchData ~ data:', data);
+        // console.log('🚀 ~ fetchData ~ data:', data);
         if (data && data.kabupaten) {
             state.setKabupaten(data.kabupaten, { provinsi_id });
             rows.value = state.getKabupaten({ provinsi_id });

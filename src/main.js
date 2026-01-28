@@ -40,11 +40,10 @@ const app = createApp(App);
 app.component('CardPage', CardPage);
 app.component('CardHeader', CardHeader);
 app.component('CardLoading', CardLoading);
-app.component('CardLoading', CardLoading);
+app.component('CardListTabel', CardListTabel);
 app.component('FormActions', FormActions);
 app.component('FormHeader', FormHeader);
 app.component('FormLoading', FormLoading);
-app.component('CardListTabel', CardListTabel);
 
 app.use(pinia);
 app.use(router);
