@@ -6,7 +6,7 @@ import {
 } from './utilities/logger';
 import { handleResponseSuccess, handleResponseErrors } from './utilities/handler';
 import { notifyError, notifySuccess } from '../utils/notify';
-import authStore from '../stores/authStore';
+import { useAuthStore } from '../stores/authStore';
 
 class Api {
     constructor() {
@@ -24,7 +24,7 @@ class Api {
      * @returns {string|null} Token akses atau null.
      */
     getAccessToken() {
-        return authStore().token || null;
+        return useAuthStore().token || null;
     }
 
     /**

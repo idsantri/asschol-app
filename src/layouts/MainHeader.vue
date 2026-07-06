@@ -42,10 +42,10 @@
 </template>
 
 <script setup>
-import authStore from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import { ref } from 'vue';
 const env = import.meta.env;
 const drawer = ref(false);
 
-const user = authStore().user;
+const user = useAuthStore().user;
 </script>

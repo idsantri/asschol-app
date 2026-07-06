@@ -1,7 +1,7 @@
 <template>
     <q-card class="full-width" style="max-width: 425px">
         <q-form @submit.prevent="onSubmit">
-            <FormHeader :title="'Input Kegiatan ' + scope" :is-new="!id" />
+            <FormHeader :title="'Input Kegiatan ' + inputs.kelompok" :is-new="!id" />
             <LoadingAbsolute v-if="loading" />
 
             <q-card-section class="q-pa-sm">
@@ -16,12 +16,13 @@
                     outlined
                     label="Tanggal (M) *"
                     v-model="inputs.tgl_m"
-                    type="date"
+                    type="datetime-local"
                     @change="
                         isValid(new Date(inputs.tgl_m)) ? (inputs.tgl_h = m2h(inputs.tgl_m)) : ''
                     "
                     :rules="[(val) => !!val || 'Harus diisi!']"
                     error-color="negative"
+                    ref="firstInput"
                 />
                 <q-input
                     dense
@@ -38,22 +39,13 @@
                     error-color="negative"
                 />
                 <q-input
-                    v-if="scope == 'Komisariat'"
                     dense
                     class="q-my-sm"
                     outlined
-                    label="Komisariat *"
-                    v-model="inputs.komisariat"
+                    label="Kelompok *"
+                    v-model="inputs.kelompok"
                     :rules="[(val) => !!val || 'Harus diisi!']"
                     readonly=""
-                />
-                <InputSelectArray
-                    v-if="scope == 'Wilayah'"
-                    v-model="inputs.komisariat"
-                    url="komisariat"
-                    label="Komisariat *"
-                    class="q-my-sm"
-                    :rules="[(val) => !!val || 'Harus diisi!']"
                 />
 
                 <InputSelectArray
@@ -73,7 +65,16 @@
                     :rules="[(val) => !!val || 'Harus diisi!']"
                     hint="Lokasi/Alamat kegiatan"
                 />
-
+                <q-input
+                    dense
+                    class="q-my-sm"
+                    outlined
+                    label="Deskripsi"
+                    v-model="inputs.deskripsi"
+                    autogrow
+                    hint="Deskripsi kegiatan"
+                />
+                <!-- scope {{ scope }} -->
                 <!-- <q-input dense class="q-my-sm" outlined label="Locked" v-model="inputs.locked" /> -->
             </q-card-section>
             <FormActions :btn-delete="!!id" @on-delete="onDelete" />
@@ -81,42 +82,46 @@
     </q-card>
 </template>
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 import LoadingAbsolute from '../LoadingAbsolute.vue';
 import InputSelectArray from './inputs/InputSelectArray.vue';
 import { notifyConfirm } from '@/utils/notify';
 import FormHeader from './parts/FormHeader.vue';
 import FormActions from './parts/FormActions.vue';
-import { isValid } from 'date-fns';
+import { format, isValid, parseISO } from 'date-fns';
 import { formatDate } from '@/utils/date-operation';
 import { bacaHijri, m2h } from '@/utils/hijri';
-import KomisariatActivities from '@/models/KomisariatActivities';
-import WilayahActivities from '@/models/WilayahActivities';
+import Activity from '@/models/Activity';
+import { id as idn } from 'date-fns/locale';
 
 const props = defineProps({
     dataInputs: { type: Object },
-    scope: { type: String, required: true },
+    // scope: { type: String, required: true },
 });
 const emit = defineEmits(['successDelete', 'successSubmit', 'successUpdate', 'successCreate']);
+
+const convertToLocalForInput = (utcString) => {
+    if (!utcString) return '';
+
+    // parseISO akan membaca 'Z' sebagai UTC
+    const date = parseISO(utcString);
+
+    // Format ke 'yyyy-MM-ddTHH:mm' (Format wajib untuk datetime-local)
+    return format(date, "yyyy-MM-dd'T'HH:mm", { locale: idn });
+};
 
 const loading = ref(false);
 const id = props.dataInputs?.id;
 const inputs = ref({ ...props.dataInputs });
-let btnClose = null;
-let model = null;
+const firstInput = useTemplateRef('firstInput');
 
 onMounted(async () => {
     if (inputs.value.tgl_m) {
-        inputs.value.tgl_m = formatDate(new Date(inputs.value.tgl_m), 'yyyy-MM-dd');
+        inputs.value.tgl_m = convertToLocalForInput(inputs.value.tgl_m);
     }
-    btnClose = document.getElementById('btn-close-form');
 
-    if (props.scope == 'Komisariat') {
-        model = KomisariatActivities;
-    }
-    if (props.scope == 'Wilayah') {
-        model = WilayahActivities;
-    }
+    await nextTick();
+    if (firstInput.value) firstInput.value.focus();
 });
 
 watch(
@@ -130,18 +135,18 @@ watch(
 
 const onSubmit = async () => {
     const data = JSON.parse(JSON.stringify(inputs.value));
+
     try {
         loading.value = true;
         let response = null;
         if (!id) {
-            response = await model.create(data);
+            response = await Activity.create(data);
             emit('successCreate', response?.activity);
         } else {
-            response = await model.update(id, data);
+            response = await Activity.update(id, data);
             emit('successUpdate', response?.activity);
         }
         emit('successSubmit', response?.activity);
-        btnClose.click();
     } catch (error) {
         console.log('error activity ', error);
     } finally {
@@ -155,8 +160,7 @@ const onDelete = async () => {
 
     try {
         loading.value = true;
-        await model.remove(id);
-        btnClose.click();
+        await Activity.remove(id);
         emit('successDelete', id);
     } catch (error) {
         console.log('error delete activity ', error);

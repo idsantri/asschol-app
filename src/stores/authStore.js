@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-const authStore = defineStore('auth', {
+const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null,
         token: null,
@@ -35,10 +35,13 @@ const authStore = defineStore('auth', {
         mustChangePassword: (state) => {
             return !!state.user.must_change_password;
         },
+        getKelompok: (state) => {
+            return state.user.kelompok;
+        },
     },
 
     persist: {
         storage: localStorage,
     },
 });
-export default authStore;
+export { useAuthStore };

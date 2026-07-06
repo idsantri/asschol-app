@@ -4,7 +4,7 @@
 
 <script setup>
 import Auth from '@/models/Auth';
-import authStore from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import { notifyConfirm } from '@/utils/notify';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -20,7 +20,7 @@ onMounted(async () => {
         } catch (error) {
             console.log('error on logout ', error);
         }
-        authStore().logout();
+        useAuthStore().logout();
         router.replace('/login');
     }
 });

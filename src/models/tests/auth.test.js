@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import Auth from '../Auth';
-import authStore from '../../stores/authStore';
+import { useAuthStore } from '../../stores/authStore';
 import setupAuth from './setupAuth';
 
 describe('auth model', () => {
@@ -79,7 +79,7 @@ describe('auth model', () => {
         expect(authState.roles).toEqual(testData.roles);
 
         // Test logout action
-        const store = authStore();
+        const store = useAuthStore();
         store.logout();
 
         authState = setupAuth.authState();
@@ -97,7 +97,7 @@ describe('auth model', () => {
 
         setupAuth.loginToStore(initialData);
 
-        const store = authStore();
+        const store = useAuthStore();
         store.setUser({ name: 'Updated User', phone: '123456789' });
 
         const authState = setupAuth.authState();

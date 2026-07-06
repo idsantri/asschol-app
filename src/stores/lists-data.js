@@ -7,6 +7,14 @@ const data = [
         protected: false,
         sort: 'asc',
     },
+    {
+        url: 'nama-kegiatan',
+        label: 'Nama Kegiatan',
+        style: 'single',
+        column: 1,
+        protected: false,
+        sort: 'asc',
+    },
 
     {
         url: 'status',

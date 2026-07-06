@@ -72,7 +72,7 @@ import { onMounted, ref } from 'vue';
 import User from '@/models/User';
 import LoadingAbsolute from '@/components/LoadingAbsolute.vue';
 import PasswordForm from './PasswordForm.vue';
-import authStore from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import { useRouter } from 'vue-router';
 import CardHeader from '@/components/cards/CardHeader.vue';
 
@@ -99,7 +99,7 @@ onMounted(async () => {
 
 const onSuccess = () => {
     showPasswordForm.value = false;
-    authStore().logout();
+    useAuthStore().logout();
     router.replace('/login');
 };
 </script>

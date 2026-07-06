@@ -74,7 +74,7 @@
 </template>
 <script setup>
 import Auth from '@/models/Auth';
-import authStore from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import BannerInstallPWA from '@/components/BannerInstallPWA.vue';
@@ -89,7 +89,7 @@ const onLogin = () => {
     isLoading.value = true;
     Auth.login({ login: login.value, password: password.value })
         .then((res) => {
-            authStore().login(res);
+            useAuthStore().login(res);
             if (res.user.must_change_password) {
                 router.replace('/profile');
             } else {

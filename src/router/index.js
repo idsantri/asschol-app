@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { nextTick } from 'vue';
-import authStore from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
 import routes from './routes';
 
 const router = createRouter({
@@ -12,7 +12,7 @@ router.beforeEach((to, _from, next) => {
     // if (to.fullPath == '/') {
     //   return next('/home')
     // }
-    const store = authStore();
+    const store = useAuthStore();
     const isAuthenticate = store.isLoggedIn;
     // const newUser = store.mustChangePassword;
 

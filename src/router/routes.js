@@ -44,6 +44,48 @@ export default [
                     },
                 ],
             },
+
+            // Activities
+            {
+                path: 'activities',
+                meta: { title: 'Kegiatan' },
+                children: [
+                    {
+                        path: '',
+                        component: () => import('@/pages/activities/ActivitiesIndex.vue'),
+                    },
+
+                    {
+                        path: ':id',
+                        component: () => import('@/pages/activities/ActivityDetail.vue'),
+                        // redirect: (to) => `${to.path}/absence-summaries`,
+                        // children: [
+                        //     {
+                        //         path: 'absence-summaries',
+                        //         component: () => import('@/pages/absences/AbsenceSummary.vue'),
+                        //     },
+                        //     {
+                        //         path: 'notes',
+                        //         component: () => import('@/pages/notes/IndexNotes.vue'),
+                        //     },
+                        // ],
+                    },
+                    // {
+                    //     path: ':id/notes/form',
+                    //     component: () => import('@/pages/notes/EditNote.vue'),
+                    // },
+                    // {
+                    //     path: ':id/absences',
+                    //     component: () => import('@/pages/absences/AbsencesIndex.vue'),
+                    // },
+                    // {
+                    //     path: ':id/absences/qr',
+                    //     component: () => import('@/pages/absences/AbsencesQR.vue'),
+                    // },
+                ],
+            },
+
+            // Cash Flows
             {
                 path: 'cash-flows',
                 meta: { title: 'Arus Kas' },
@@ -54,32 +96,6 @@ export default [
                     },
                 ],
             },
-
-            // Wilayah
-            // {
-            //     path: 'wilayah',
-            //     meta: { scope: 'Wilayah', title: 'Kegiatan Wilayah' },
-            //     children: [
-            //         ..._common,
-            //         {
-            //             path: 'absence-nks/rekap-komisariat',
-            //             component: () => import('@/pages/absences/RekapKomisariat.vue'),
-            //             meta: { title: 'Absensi NKS | Rekap Komisariat' },
-            //         },
-            //         {
-            //             path: 'absence-nks/rekap-member',
-            //             component: () => import('@/pages/absences/RekapMember.vue'),
-            //             meta: { title: 'Absensi NKS | Rekap Anggota' },
-            //         },
-            //     ],
-            // },
-
-            // Komisariat
-            // {
-            //     path: 'komisariat',
-            //     meta: { scope: 'Komisariat', title: 'Kegiatan Komisariat' },
-            //     children: _common,
-            // },
 
             // Settings
             {

@@ -1,4 +1,4 @@
-import authStore from '../../stores/authStore';
+import { useAuthStore } from '../../stores/authStore';
 import Auth from '../Auth';
 import { createPinia, setActivePinia } from 'pinia';
 
@@ -6,17 +6,17 @@ const setupAuth = (() => {
     let savedAuth = null;
 
     function authState() {
-        const store = authStore();
+        const store = useAuthStore();
         return store.$state;
     }
 
     function resetAuth() {
-        const store = authStore();
+        const store = useAuthStore();
         store.$reset();
     }
 
     function loginToStore(authData) {
-        const store = authStore();
+        const store = useAuthStore();
         store.login(authData);
     }
 
@@ -39,7 +39,7 @@ const setupAuth = (() => {
         loginToStore(result);
 
         // Verify token is stored
-        const store = authStore();
+        const store = useAuthStore();
         console.log('Store state after login:', store.$state);
 
         return result;
