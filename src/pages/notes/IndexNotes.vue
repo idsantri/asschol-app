@@ -20,12 +20,11 @@
                 class="q-px-sm text-orange-1"
                 icon="add"
                 @click="goEdit"
+                dense
+                :disabled="activity.locked"
             />
         </QCardActions>
         <LoadingAbsolute v-if="loading" />
-        <div v-if="activity.locked" class="q-mt-sm q-pa-md text-center text-negative bg-orange-3">
-            Data tidak dapat diubah karena kegiatan sudah dikunci.
-        </div>
         <q-card-section class="q-pa-sm">
             <q-list class="column q-gutter-y-sm">
                 <template v-if="notes.length > 0">
@@ -41,7 +40,11 @@
                             <q-card-section class="text-justify q-pa-sm relative-position">
                                 <span v-html="note.content"></span>
                             </q-card-section>
-                            <q-card-actions class="bg-grey-2" align="right" v-if="!activity.locked">
+                            <q-card-actions class="bg-grey-2">
+                                <div v-if="activity.locked" class="text-red">
+                                    Kegiatan dikunci, tidak bisa mengubah catatan.
+                                </div>
+                                <q-space />
                                 <q-btn
                                     outline=""
                                     icon="edit"
@@ -50,6 +53,7 @@
                                     dense
                                     no-caps
                                     @click="goEdit(note)"
+                                    v-show="!activity.locked"
                                 />
                             </q-card-actions>
                         </q-card>
@@ -71,30 +75,31 @@
 <script setup>
 import LoadingAbsolute from '@/components/LoadingAbsolute.vue';
 import Note from '@/models/Note';
-import { onMounted, ref, shallowRef } from 'vue';
+import { ref, shallowRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
-    activityId: { required: true },
-    scope: { type: String, required: true },
+    activity: { required: true },
 });
 
 const loading = ref(false);
 const notes = shallowRef([]);
-const activity = shallowRef({});
 
-onMounted(async () => {
-    if (props.activityId) {
-        await loadData();
-    }
-});
+watch(
+    () => props.activity,
+    async (newVal) => {
+        if (newVal.id) {
+            await loadData();
+        }
+    },
+    { immediate: true },
+);
 
 async function loadData() {
     try {
         loading.value = true;
-        const res = await Note.getAll({ activity_id: props.activityId });
+        const res = await Note.getAll({ activity_id: props.activity.id });
         notes.value = res.notes;
-        activity.value = res.activity;
     } catch (e) {
         console.log('error get note ', e);
     } finally {
@@ -103,13 +108,13 @@ async function loadData() {
 }
 
 const router = useRouter();
+
 function goEdit(note = {}) {
     router.push({
-        path: `/activities/${props.activityId}/notes/form`,
+        path: `/activities/${props.activity.id}/notes/form`,
         state: {
-            note: { activity_id: activity.value.id, ...note },
-            activity: { ...activity.value },
-            scope: props.scope,
+            note: { ...note },
+            activity: { ...props.activity },
         },
     });
 }

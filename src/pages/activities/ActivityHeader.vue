@@ -9,7 +9,10 @@
                 {{ bacaHijri(activity.tgl_h) }}
             </small>
         </div>
-        <div v-if="activity.locked" class="q-mt-sm q-pa-sm text-center text-negative bg-orange-3">
+        <div
+            v-if="activity.locked && showLockStatus"
+            class="q-mt-sm q-pa-sm text-center text-negative bg-orange-3"
+        >
             Kegiatan ini sudah dikunci, <br />tidak bisa mengubah data absensi!
         </div>
     </div>
@@ -23,6 +26,10 @@ export default {
         activity: {
             type: Object,
             required: true,
+        },
+        showLockStatus: {
+            type: Boolean,
+            default: true,
         },
     },
     setup() {

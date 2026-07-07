@@ -10,12 +10,12 @@
                 class="q-mr-xs"
                 title="Muat ulang"
             />
-            <!-- <div>Rekap Kelompok</div> -->
+            <div>Rekap Absensi</div>
             <QSpace />
             <div class="tw:flex tw:gap-2">
                 <QBtn
                     :to="{
-                        path: `/activities/${activityId}/absences/qr`,
+                        path: `/activities/${activity.id}/absences/qr`,
                         // query: { scope: query.scope },
                     }"
                     :label="$q.screen.lt.sm ? 'Scan' : 'Scan QR Code'"
@@ -28,7 +28,7 @@
                 />
                 <QBtn
                     :to="{
-                        path: `/activities/${activityId}/absences`,
+                        path: `/activities/${activity.id}/absences`,
                         // query: { scope: query.scope },
                     }"
                     :label="$q.screen.lt.sm ? 'Detail' : 'Detail Absensi'"
@@ -71,15 +71,16 @@
                     <tr>
                         <td colspan="4" class="text-center q-pa-lg">
                             <div class="q-my-md">Belum ada data untuk ditampilkan</div>
-                            <QBtn
-                                icon="assignment_add"
-                                label="Buat Absen"
-                                class="q-my-md"
-                                outline
-                                no-caps
-                                glossy
-                                @click="createAbsence"
-                            />
+                            <div class="q-my-md">
+                                <QBtn
+                                    icon="assignment_add"
+                                    label="Buat Absen"
+                                    outline
+                                    no-caps
+                                    glossy
+                                    @click="createAbsence"
+                                />
+                            </div>
                         </td>
                     </tr>
                 </template>
@@ -113,20 +114,30 @@
 import LoadingAbsolute from '@/components/LoadingAbsolute.vue';
 import Absence from '@/models/Absence';
 import { notifyConfirm } from '@/utils/notify';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
-    activityId: { required: true },
+    activity: { required: true },
 });
 
 const loading = ref(false);
 const report = ref([]);
 
 onMounted(async () => {
-    if (props.activityId) {
+    if (props.activity.id) {
         await loadData();
     }
 });
+
+watch(
+    () => props.activity,
+    async (newVal) => {
+        if (newVal.id) {
+            await loadData();
+        }
+    },
+    { immediate: true },
+);
 
 const sumActive = computed(() => {
     return report.value.reduce((accumulator, r) => {
@@ -143,7 +154,7 @@ const sumHadir = computed(() => {
 async function loadData() {
     try {
         loading.value = true;
-        const res = await Absence.getSummary(props.activityId);
+        const res = await Absence.getSummary(props.activity.id);
         report.value = res.absence_summaries;
     } catch (e) {
         console.log('error report absence', e);
@@ -155,7 +166,7 @@ async function loadData() {
 async function createAbsence() {
     try {
         loading.value = true;
-        const res = await Absence.createByActivity(props.activityId);
+        const res = await Absence.createByActivity(props.activity.id);
         report.value = res.absence_summaries;
     } catch (e) {
         console.log('error report absence', e);
@@ -170,7 +181,7 @@ async function resetAbsence() {
 
     try {
         loading.value = true;
-        await Absence.removeByActivity(props.activityId);
+        await Absence.removeByActivity(props.activity.id);
         report.value = [];
     } catch (error) {
         console.log('error on reset absence ', error);

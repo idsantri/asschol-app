@@ -11,7 +11,6 @@
                     class="q-px-md"
                     :to="{
                         path: `/activities/${activityId}/absences/qr`,
-                        query: { scope: query.scope },
                     }"
                 />
             </template>
@@ -21,18 +20,21 @@
                 <LoadingAbsolute v-if="loading" />
 
                 <QCardSection class="q-px-sm q-pt-sm q-pb-none">
-                    <ActivityHeader :activity="activity" :scope="query.scope" />
+                    <ActivityHeader :activity="activity" />
                 </QCardSection>
                 <q-card-section class="q-px-sm q-pt-none q-pb-sm">
-                    <div class="q-ma-sm full-width" style="max-width: 450px">
+                    <div
+                        class="q-my-sm"
+                        style="margin-left: auto; margin-right: auto; max-width: 450px"
+                    >
                         <QInput
                             v-model="filterInput"
                             label="Cari data"
                             outlined
                             dense
-                            class=""
                             clearable
                             type="search"
+                            style="width: 100%"
                         />
                     </div>
 
@@ -117,7 +119,7 @@ import ActivityHeader from '@/pages/activities/ActivityHeader.vue';
 import Absence from '@/models/Absence';
 import LoadingAbsolute from '@/components/LoadingAbsolute.vue';
 
-const { params, query } = useRoute();
+const { params } = useRoute();
 const activityId = params.id;
 const loading = ref(false);
 const absences = ref([]);

@@ -1,6 +1,5 @@
 import MainLayout from '@/layouts/MainLayout.vue';
 import HomeView from '@/pages/HomeView.vue';
-// import _common from './_common';
 
 export default [
     {
@@ -54,7 +53,6 @@ export default [
                         path: '',
                         component: () => import('@/pages/activities/ActivitiesIndex.vue'),
                     },
-
                     {
                         path: ':id',
                         component: () => import('@/pages/activities/ActivityDetail.vue'),
@@ -64,16 +62,16 @@ export default [
                                 path: 'absence-summaries',
                                 component: () => import('@/pages/absences/AbsenceSummary.vue'),
                             },
-                            // {
-                            //     path: 'notes',
-                            //     component: () => import('@/pages/notes/IndexNotes.vue'),
-                            // },
+                            {
+                                path: 'notes',
+                                component: () => import('@/pages/notes/IndexNotes.vue'),
+                            },
                         ],
                     },
-                    // {
-                    //     path: ':id/notes/form',
-                    //     component: () => import('@/pages/notes/EditNote.vue'),
-                    // },
+                    {
+                        path: ':id/notes/form',
+                        component: () => import('@/pages/notes/EditNote.vue'),
+                    },
                     {
                         path: ':id/absences',
                         component: () => import('@/pages/absences/AbsencesIndex.vue'),

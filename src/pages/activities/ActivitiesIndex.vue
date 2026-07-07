@@ -56,7 +56,6 @@
                 :dataInputs="{
                     kelompok: auth.getKelompok,
                 }"
-                :scope="QScope"
             />
         </QDialog>
     </CardPage>
@@ -77,15 +76,15 @@ const auth = useAuthStore();
 const activities = ref([]);
 const loading = ref(false);
 const dialog = ref(false);
-const QScope = useQueryState('kelompok', '');
+const qKelompok = useQueryState('kelompok', '');
 const router = useRouter();
 const filterKelompok = ref('');
 const filterText = ref('');
 
 const titlePage = computed(() => {
     const baseTitle = 'Data Kegiatan';
-    if (QScope.value) {
-        return `${baseTitle} — ${toProperCase(QScope.value)}`;
+    if (qKelompok.value) {
+        return `${baseTitle} — ${toProperCase(qKelompok.value)}`;
     }
     return baseTitle;
 });
@@ -98,8 +97,8 @@ const filteredActivities = computed(() =>
         : activities.value,
 );
 
-watch(filterKelompok, async (newScope, _oldScope) => {
-    QScope.value = newScope;
+watch(filterKelompok, async (newVal, _oldVal) => {
+    qKelompok.value = newVal;
 });
 
 async function loadData() {
@@ -122,7 +121,7 @@ const onCreate = (newActivity) => {
     dialog.value = false;
     router.push({
         path: `/activities/${newActivity.id}`,
-        // query: { scope: QScope.value },
+        // query: { scope: qKelompok.value },
     });
 };
 

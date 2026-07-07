@@ -78,7 +78,6 @@
                     <q-route-tab
                         :to="{
                             path: `/activities/${id}/absence-summaries`,
-                            query: { scope: query.scope },
                         }"
                         icon="sym_o_planner_review"
                         label="Absensi"
@@ -89,7 +88,6 @@
                     <q-route-tab
                         :to="{
                             path: `/activities/${id}/notes`,
-                            query: { scope: query.scope },
                         }"
                         icon="sym_o_comment"
                         label="Catatan"
@@ -98,7 +96,7 @@
                         replace
                     />
                 </q-tabs>
-                <RouterView :key="$route.path" :activityId="id" :scope="query.scope" />
+                <RouterView :key="$route.path" :activityId="id" :activity="activity" />
             </q-card>
         </q-card-section>
         <QDialog v-model="dialog">
@@ -121,13 +119,13 @@ import Activity from '@/models/Activity';
 import { toProperCase } from '@/utils/string';
 import { useRouter } from 'vue-router';
 
-const { params, query } = useRoute();
+const { params } = useRoute();
 const id = params.id;
 const dialog = ref(false);
 const activity = ref({});
 const loading = ref(false);
 const router = useRouter();
-const titlePage = computed(() => `Detail Kegiatan ${toProperCase(activity.value?.lingkup ?? '')}`);
+const titlePage = computed(() => `Detail Kegiatan ${toProperCase(activity.value?.kelompok ?? '')}`);
 
 onMounted(async () => {
     if (id) await loadData();
