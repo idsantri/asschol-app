@@ -13,8 +13,6 @@
             <MainSideItem :data="master" title="Master" />
             <!-- <q-separator /> -->
             <!-- <MainSideItem :data="activities" title="Wilayah" /> -->
-            <!-- <q-separator /> -->
-            <!-- <MainSideItem :data="komisariat" title="Komisariat" /> -->
             <q-separator />
             <MainSideItem :data="setting" title="Pengaturan" />
         </q-list>
@@ -43,32 +41,6 @@ const master = [
         label: 'Arus Kas',
         caption: 'Keuangan Organisasi',
         route: '/cash-flows',
-        disable: false,
-    },
-];
-
-const _wilayah = [
-    {
-        icon: 'sym_o_history_2',
-        label: 'Kegiatan',
-        caption: 'Kegiatan Wilayah',
-        route: '/wilayah/activities',
-        disable: false,
-    },
-
-    {
-        icon: 'sym_o_overview_key',
-        label: 'Rekap Komisariat',
-        caption: 'Absensi by Komisariat',
-        route: '/wilayah/absence-nks/rekap-komisariat',
-        disable: false,
-    },
-    {
-        icon: 'sym_o_clinical_notes',
-        label: 'Rekap Anggota',
-        caption: 'Absensi by Anggota',
-        route: '/wilayah/absence-nks/rekap-member',
-        separator: true,
         disable: false,
     },
 ];

@@ -16,14 +16,12 @@ export default defineStore('members', {
 
     getters: {
         filteredMembers: (state) => {
-            // First filter by komisariat
             const filteredByKelompok = state.filterKelompok
                 ? state.members.filter(
                       (item) =>
                           item.kelompok?.toLowerCase() === state.filterKelompok?.toLowerCase(),
                   )
                 : state.members;
-            // console.log('komisariat', state.filterKomisariat, filteredByKomisariat);
 
             // Then filter by status
             const filterByStatus = filteredByKelompok.filter((item) => {

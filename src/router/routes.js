@@ -58,30 +58,30 @@ export default [
                     {
                         path: ':id',
                         component: () => import('@/pages/activities/ActivityDetail.vue'),
-                        // redirect: (to) => `${to.path}/absence-summaries`,
-                        // children: [
-                        //     {
-                        //         path: 'absence-summaries',
-                        //         component: () => import('@/pages/absences/AbsenceSummary.vue'),
-                        //     },
-                        //     {
-                        //         path: 'notes',
-                        //         component: () => import('@/pages/notes/IndexNotes.vue'),
-                        //     },
-                        // ],
+                        redirect: (to) => `${to.path}/absence-summaries`,
+                        children: [
+                            {
+                                path: 'absence-summaries',
+                                component: () => import('@/pages/absences/AbsenceSummary.vue'),
+                            },
+                            // {
+                            //     path: 'notes',
+                            //     component: () => import('@/pages/notes/IndexNotes.vue'),
+                            // },
+                        ],
                     },
                     // {
                     //     path: ':id/notes/form',
                     //     component: () => import('@/pages/notes/EditNote.vue'),
                     // },
-                    // {
-                    //     path: ':id/absences',
-                    //     component: () => import('@/pages/absences/AbsencesIndex.vue'),
-                    // },
-                    // {
-                    //     path: ':id/absences/qr',
-                    //     component: () => import('@/pages/absences/AbsencesQR.vue'),
-                    // },
+                    {
+                        path: ':id/absences',
+                        component: () => import('@/pages/absences/AbsencesIndex.vue'),
+                    },
+                    {
+                        path: ':id/absences/qr',
+                        component: () => import('@/pages/absences/AbsencesQR.vue'),
+                    },
                 ],
             },
 

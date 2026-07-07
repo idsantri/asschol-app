@@ -21,7 +21,6 @@ describe('member model', () => {
         district: 'Socah',
         alumni: true,
         wilayah: 'Bangkalan',
-        komisariat: 'Socah',
         kelompok: 'Kesamben',
     };
 

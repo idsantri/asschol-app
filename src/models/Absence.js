@@ -1,8 +1,8 @@
 import ApiCrud from './ApiCrud';
 
-class WilayahAbsences extends ApiCrud {
+class Absence extends ApiCrud {
     constructor() {
-        super('wilayah/absences');
+        super(`absences`);
     }
 
     async setHadir(data) {
@@ -25,26 +25,21 @@ class WilayahAbsences extends ApiCrud {
 
     async removeByActivity(activityId) {
         this.setNotify(true);
-        const response = await this.fetchAuth(`${this.path}/activities/${activityId}`, {
+        const response = await this.fetchAuth(`${this.path}`, {
             method: 'DELETE',
+            params: { activity_id: activityId },
         });
         return response.data || true;
     }
 
-    async getByActivity(activityId) {
+    async getSummary(activityId) {
         this.setNotifyGet();
-        const response = await this.fetchAuth(`${this.path}/activities/${activityId}`, {
+        const response = await this.fetchAuth(`${this.path}/summaries`, {
             method: 'GET',
-        });
-        return response.data || true;
-    }
-
-    async getSummaryByActivity(activityId) {
-        this.setNotifyGet();
-        const response = await this.fetchAuth(`${this.path}/activities/${activityId}/summaries`, {
-            method: 'GET',
+            params: { activity_id: activityId },
         });
         return response.data || true;
     }
 }
-export default new WilayahAbsences();
+
+export default new Absence();
