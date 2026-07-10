@@ -17,6 +17,21 @@
                     outline=""
                 />
             </template>
+            <template #more>
+                <q-list>
+                    <q-item v-close-popup>
+                        <q-item-section>
+                            <q-item-label>ID Card</q-item-label>
+                        </q-item-section>
+                        <q-item-section avatar>
+                            <q-btn icon="download" flat @click="downloadIdCard" />
+                        </q-item-section>
+                        <q-item-section avatar>
+                            <q-btn icon="print" flat disable />
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </template>
         </CardHeader>
         <QCardSection class="q-pa-sm q-gutter-sm" style="max-width: 1024px">
             <QCard bordered flat>
@@ -65,6 +80,7 @@ import { useRouter } from 'vue-router';
 import ArrayCrud from '@/models/ArrayCrud';
 import CardHeader from '@/components/cards/CardHeader.vue';
 import MemberAvatarForm from '@/components/forms/MemberAvatarForm.vue';
+import FileDownloader from '@/models/FileDownloader.js';
 
 const { params } = useRoute();
 const id = params.id;
@@ -106,4 +122,18 @@ const onUpdateStatus = (obj) => {
 const onCreateStatus = (obj) => {
     anggota.value.statuses = ArrayCrud.create(anggota.value.statuses, obj, 'first');
 };
+
+async function downloadIdCard() {
+    try {
+        loading.value = true;
+        await FileDownloader.downloadIdCard(
+            'id-card-' + anggota.value.id + '~' + anggota.value.nama + '.pdf',
+            anggota.value.id,
+        );
+    } catch (error) {
+        console.error('Error downloading id card:', error);
+    } finally {
+        loading.value = false;
+    }
+}
 </script>

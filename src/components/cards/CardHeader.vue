@@ -69,7 +69,7 @@
                     <q-btn-dropdown
                         flat
                         no-caps
-                        class="text-orange-11"
+                        class="text-orange-1"
                         dense
                         dropdown-icon="more_vert"
                         :disabled="!slotMore"

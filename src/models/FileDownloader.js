@@ -24,6 +24,10 @@ class FileDownloader extends Api {
     async downloadMember(fileName, params) {
         await this.#fetchDownload(`members/export`, fileName, { params });
     }
+
+    async downloadIdCard(fileName, id) {
+        await this.#fetchDownload(`members/${id}/id-card/download`, fileName);
+    }
 }
 
 export default new FileDownloader();
