@@ -83,7 +83,11 @@ export default [
                 ],
             },
 
-            // Cash Flows
+            // Accounts & Cash Flows
+            {
+                path: 'accounts',
+                component: () => import('../pages/accounts/AccountPage.vue'),
+            },
             {
                 path: 'cash-flows',
                 meta: { title: 'Arus Kas' },

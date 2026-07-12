@@ -1,231 +1,287 @@
-<template lang="">
+<template>
     <CardPage>
-        <CardHeader title="Arus Kas Organisasi" @on-reload="() => loadData(accountName)">
-            <template #buttons>
-                <q-btn
-                    label="Tambah"
-                    icon="add"
-                    no-caps
-                    outline
-                    dense
-                    class="q-px-sm"
-                    @click="addRow"
-                />
-            </template>
-        </CardHeader>
-        <QCardActions class="q-pa-sm flex items-center justify-between q-gutter-y-sm">
+        <CardHeader
+            :title="titlePage"
+            @on-reload="null"
+            :show-reload="false"
+            :show-add="true"
+            @on-add="handleAdd"
+            :disable-add="!account"
+        />
+
+        <q-card-section
+            class="q-pa-sm tw:grid tw:grid-cols-1 tw:gap-2 tw:w-full tw:sm:flex tw:sm:items-center tw:sm:justify-between bg-orange-1"
+        >
+            <InputSelectArray
+                v-model="QKelompok"
+                url="kelompok-koordinasi"
+                label="Pilih Kelompok"
+                class="tw:w-full tw:sm:flex-1 tw:sm:max-w-md"
+            />
             <q-select
-                v-model="accountName"
-                :options="optionsList"
-                label="Pilih Nama Rekening"
+                v-model="QAccount"
+                :options="optionsAccount"
+                label="Daftar Rekening Aktif"
                 dense
                 outlined
                 clearable
                 behavior="menu"
-                class="full-width"
-                style="max-width: 400px"
-                :loading="loadingOptions"
+                class="tw:w-full tw:sm:flex-1 tw:sm:max-w-md"
+                :loading="loadingAccounts"
+                option-value="slug"
+                option-label="nama"
+                emit-value
+                map-options
+                :disable="!QKelompok"
             >
                 <template v-slot:after>
-                    <q-btn no-caps outline icon="sync" @click="getList" class="q-pa-sm" />
+                    <q-btn
+                        no-caps
+                        outline
+                        :color="!!QKelompok ? 'orange-10' : ''"
+                        :glossy="!!QKelompok"
+                        icon="sync"
+                        @click="() => loadAccounts(QKelompok)"
+                        class="q-pa-sm"
+                        :disable="!QKelompok"
+                    />
+                    <q-btn
+                        no-caps
+                        outline
+                        color="orange-10"
+                        glossy
+                        icon="settings"
+                        :to="{
+                            path: '/accounts',
+                            query: { kelompok: auth.getKelompok },
+                        }"
+                        class="q-pa-sm"
+                    />
                 </template>
             </q-select>
-            <QInput
-                v-model="accountSearch"
+            <q-input
+                class="tw:w-full tw:sm:flex-1 tw:sm:max-w-md"
+                borderless
                 dense
+                debounce="300"
+                v-model="searchModel"
+                placeholder="Cari"
                 outlined
-                class="full-width"
-                style="max-width: 400px"
-                type="search"
                 clearable
                 label="Cari Arus Kas"
-            />
-        </QCardActions>
-        <QCardSection class="q-pa-sm">
+            >
+                <template v-slot:append>
+                    <q-icon name="search" />
+                </template>
+            </q-input>
+        </q-card-section>
+
+        <q-card-section class="q-pa-sm">
             <q-table
-                :rows="filteredCashFlows"
-                :loading="loadingData"
                 flat
                 bordered
-                :rows-per-page-options="[10, 25, 50, 100, 0]"
+                :rows="cashFlows"
                 :columns="columns"
+                row-key="id"
+                :loading="lodCashFlow"
+                :rows-per-page-options="[10, 25, 50, 100, 0]"
+                :filter="searchModel"
+                no-data-label="Tidak ada data untuk ditampilkan"
+                no-results-label="Data tidak ditemukan"
             >
-                <template v-slot:body-cell-edit="props">
+                <template v-slot:body-cell-id="props">
                     <q-td :props="props">
                         <q-btn
-                            flat
-                            color="orange-10"
                             icon="edit"
+                            flat
                             dense
-                            @click="editRow(props.row)"
+                            color="orange-10"
+                            :model-value="props.value"
+                            @click="handleEdit(props.row)"
                         />
                     </q-td>
                 </template>
             </q-table>
-        </QCardSection>
-        <QDialog v-model="showForm" persistent>
+        </q-card-section>
+        <QDialog v-model="dialog">
             <CashFlowForm
-                @success-create="
-                    (r) => {
-                        accountName = r.account;
-                        loadData(accountName);
-                    }
-                "
-                @success-update="
-                    (r) => {
-                        accountName = r.account;
-                        loadData(accountName);
-                    }
-                "
-                @success-delete="loadData(accountName)"
-                :data-inputs="cashFlow"
+                :dataInputs="cashFlow"
+                :kelompok="QKelompok"
+                @success-create="() => loadCashFlows(QAccount)"
+                @success-update="() => loadCashFlows(QAccount)"
+                @success-delete="() => loadCashFlows(QAccount)"
             />
         </QDialog>
     </CardPage>
 </template>
 <script setup>
-import CardHeader from '@/components/cards/CardHeader.vue';
+import { ref, watch, computed } from 'vue';
+import InputSelectArray from '@/components/forms/inputs/InputSelectArray.vue';
 import CashFlowForm from '@/components/forms/CashFlowForm.vue';
 import CashFlow from '@/models/CashFlow';
 import { formatDate } from '@/utils/date-operation';
-import { computed, onMounted, ref, watch } from 'vue';
-const optionsList = ref([]);
-const loadingOptions = ref(false);
-const cash_flows = ref([]);
+import { useQueryState } from 'vue-url-state';
+import { useAccountsStore } from '@/stores/accountsStore';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/authStore';
+
+const store = useAccountsStore();
+const { accounts, isLoading: loadingAccounts } = storeToRefs(store);
+const auth = useAuthStore();
+const searchModel = ref('');
+const QKelompok = useQueryState('kelompok', '');
+const QAccount = useQueryState('rekening', '');
+
+const dialog = ref(false);
+const cashFlows = ref([]);
 const cashFlow = ref({});
-const loadingData = ref(false);
-const accountName = ref('');
-const accountSearch = ref('');
-const showForm = ref(false);
+const lodCashFlow = ref(false);
 
-function editRow(row) {
-    // console.log('edit row ', row.id);
-    cashFlow.value = { ...row };
-    showForm.value = true;
-}
-
-function addRow() {
-    // console.log('add row');
-    cashFlow.value = { account: accountName.value };
-    showForm.value = true;
-}
-
-const filteredCashFlows = computed(() => {
-    if (!accountSearch.value) {
-        return cash_flows.value;
+const titlePage = computed(() => {
+    const baseTitle = 'Arus Kas';
+    if (QKelompok.value) {
+        return `${baseTitle} —  ${QKelompok.value?.toUpperCase() || ''}`;
     }
-    const result = cash_flows.value.filter((item) =>
-        Object.values(item).some((val) =>
-            String(val).toLowerCase().includes(accountSearch.value.toLowerCase()),
-        ),
+    return baseTitle;
+});
+
+const optionsAccount = computed(() => {
+    return accounts.value.filter(
+        (a) => a.active && a.kelompok.toLowerCase() === QKelompok.value?.toLowerCase(),
     );
-
-    return result;
 });
 
-async function getList() {
+const account = computed(() => {
+    return optionsAccount.value.find((a) => a.slug == QAccount.value);
+});
+
+function loadAccounts(kelompok) {
+    return store.loadData({ kelompok });
+}
+
+watch(QKelompok, async (kelompok) => {
+    if (kelompok) {
+        const filtered = accounts.value.filter(
+            (a) => a.kelompok.toLowerCase() == kelompok.toLowerCase(),
+        );
+        // console.log('🚀 ~ scoped:', scoped);
+        if (!filtered.length) {
+            await loadAccounts(kelompok);
+        }
+    }
+    QAccount.value = '';
+});
+
+watch(
+    QAccount,
+    async (rekening) => {
+        cashFlows.value = [];
+        if (!rekening) return;
+        await loadCashFlows(rekening);
+    },
+    { immediate: true },
+);
+
+async function loadCashFlows(rekening) {
+    dialog.value = false;
     try {
-        loadingOptions.value = true;
-        optionsList.value = [];
-        const data = await CashFlow.listAccount();
-        optionsList.value = data.accounts;
-    } catch (e) {
-        console.log('error get account list ', e);
+        lodCashFlow.value = true;
+        const res = await CashFlow.getAll({ rekening });
+        if (res && res.cash_flows) {
+            cashFlows.value = res.cash_flows;
+        }
+    } catch (err) {
+        console.error('🚀 ~ loadCashFlows ~ err:', err);
     } finally {
-        loadingOptions.value = false;
+        lodCashFlow.value = false;
     }
 }
 
-async function loadData(account) {
-    if (!account) {
-        cash_flows.value = [];
-        return;
-    }
-    showForm.value = false;
-    try {
-        loadingData.value = true;
-        const data = await CashFlow.getAll({ account: account });
-        cash_flows.value = data.cash_flows;
-    } catch (e) {
-        console.log('error load cash flow data ', e);
-    } finally {
-        loadingData.value = false;
-    }
-}
+const handleAdd = () => {
+    cashFlow.value = {
+        rekening: QAccount.value,
+        rekening_nama: account.value.nama,
+    };
+    dialog.value = true;
+};
 
-onMounted(async () => {
-    await getList();
-});
-
-watch(accountName, async (newVal, _oldVal) => {
-    if (newVal) {
-        await loadData(newVal);
-    } else {
-        cash_flows.value = [];
-    }
-});
+const handleEdit = (obj) => {
+    cashFlow.value = {
+        ...obj,
+        rekening: QAccount.value,
+        rekening_nama: account.value.nama,
+    };
+    dialog.value = true;
+};
 
 const columns = [
     {
-        name: 'transaction_date',
-        label: 'Tanggal',
-        field: 'transaction_date',
+        name: 'tgl_transaksi',
         align: 'left',
-        format: (val) => formatDate(val, 'dd/MM/yyyy'),
+        label: 'Tanggal',
+        field: 'tgl_transaksi',
+        format: (val) => formatDate(val, 'dd-MM-yyyy'),
         sortable: true,
     },
     {
-        name: 'description',
-        label: 'Deskripsi',
-        field: 'description',
+        name: 'keterangan',
         align: 'left',
-        sortable: false,
+        label: 'Keterangan',
+        field: 'keterangan',
+        sortable: true,
     },
     {
-        name: 'income',
-        label: 'Pemasukan',
-        field: 'income',
+        name: 'masuk',
         align: 'right',
+        label: 'Masuk',
+        field: 'masuk',
         format: (val) =>
-            val &&
             new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
                 minimumFractionDigits: 0,
             }).format(val),
+        sortable: true,
     },
     {
-        name: 'expense',
-        label: 'Pengeluaran',
-        field: 'expense',
+        name: 'keluar',
         align: 'right',
+        label: 'Keluar',
+        field: 'keluar',
         format: (val) =>
-            val &&
             new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
                 minimumFractionDigits: 0,
             }).format(val),
+        sortable: true,
     },
     {
-        name: 'balance',
+        name: 'saldo',
+        align: 'right',
         label: 'Saldo',
-        field: 'balance',
-        align: 'right',
+        field: 'saldo',
         format: (val) =>
             new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR',
                 minimumFractionDigits: 0,
             }).format(val),
+        sortable: true,
     },
     {
-        name: 'edit',
-        label: 'Edit',
-        field: 'edit',
+        name: 'atas_nama',
+        align: 'left',
+        label: 'Atas Nama',
+        field: 'atas_nama',
+        sortable: true,
+    },
+    {
+        name: 'id',
         align: 'center',
-        sortable: false,
-        // You can add a slot for custom rendering if needed
+        label: 'Edit',
+        field: 'id',
     },
 ];
 </script>
+<style lang=""></style>

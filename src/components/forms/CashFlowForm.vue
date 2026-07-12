@@ -1,23 +1,25 @@
 <template>
     <q-card class="full-width" style="max-width: 425px">
         <q-form @submit.prevent="onSubmit">
-            <FormHeader title="Arus Kas" :is-new="!id" />
+            <FormHeader :title="'Input Arus Kas — ' + kelompok?.toUpperCase()" :is-new="!id" />
             <LoadingAbsolute v-if="loading" />
 
             <q-card-section class="q-pa-sm">
-                <InputSelectArray
-                    v-model="inputs.account"
-                    url="account-name"
+                <q-input
+                    v-model="inputs.rekening_nama"
                     label="Rekening *"
                     class="q-my-sm"
                     :rules="[(val) => !!val || 'Harus diisi!']"
+                    dense=""
+                    outlined=""
+                    readonly=""
                 />
                 <q-input
                     dense
                     outlined
                     label="Keterangan *"
                     class="q-my-sm"
-                    v-model="inputs.description"
+                    v-model="inputs.keterangan"
                     :rules="[(val) => !!val || 'Harus diisi!']"
                 />
                 <q-card bordered flat class="q-px-sm q-my-sm bg-transparent flex items-center">
@@ -34,7 +36,7 @@
                     dense
                     class="q-my-sm"
                     outlined
-                    v-model="inputs.amount"
+                    v-model="inputs.nominal"
                     required
                     label="Nominal"
                     :rules="[(val) => !!val || 'Harus diisi!']"
@@ -43,8 +45,16 @@
                     dense
                     class="q-my-sm"
                     outlined
+                    label="Atas Nama"
+                    v-model="inputs.atas_nama"
+                    autogrow=""
+                />
+                <q-input
+                    dense
+                    class="q-my-sm"
+                    outlined
                     label="Catatan"
-                    v-model="inputs.note"
+                    v-model="inputs.catatan"
                     autogrow=""
                 />
             </q-card-section>
@@ -53,9 +63,8 @@
     </q-card>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import LoadingAbsolute from '../LoadingAbsolute.vue';
-import InputSelectArray from './inputs/InputSelectArray.vue';
 import { notifyConfirm } from '@/utils/notify';
 import FormHeader from './parts/FormHeader.vue';
 import FormActions from './parts/FormActions.vue';
@@ -64,21 +73,16 @@ import InputCurrency from './inputs/InputCurrency.vue';
 
 const props = defineProps({
     dataInputs: { type: Object, required: true },
+    kelompok: { type: String, required: true },
 });
 const emit = defineEmits(['successDelete', 'successSubmit', 'successUpdate', 'successCreate']);
 
 const inputs = ref({ flag: 'in', ...props.dataInputs });
 const loading = ref(false);
-let btnClose = null;
 const id = props.dataInputs?.id;
-
-onMounted(async () => {
-    btnClose = document.getElementById('btn-close-form');
-});
 
 const onSubmit = async () => {
     const data = JSON.parse(JSON.stringify(inputs.value));
-
     try {
         loading.value = true;
         let response = null;
@@ -90,7 +94,6 @@ const onSubmit = async () => {
             emit('successUpdate', response?.cash_flow);
         }
         emit('successSubmit', response?.cash_flow);
-        btnClose.click();
     } catch (error) {
         console.log('error status ', error);
     } finally {
@@ -105,7 +108,6 @@ const onDelete = async () => {
     try {
         loading.value = true;
         await CashFlow.remove(id);
-        btnClose.click();
         emit('successDelete', id);
     } catch (error) {
         console.log('error delete status ', error);
