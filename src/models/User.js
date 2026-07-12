@@ -31,5 +31,14 @@ class User extends ApiCrud {
         });
         return response.data || true;
     }
+
+    async updateMyProfile(data) {
+        this.setNotify(true);
+        const response = await this.fetchAuth(`user`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+        });
+        return response.data || true;
+    }
 }
 export default new User();

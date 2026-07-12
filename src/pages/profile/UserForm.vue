@@ -1,37 +1,27 @@
 <template>
     <QCard flat bordered>
-        <QCardSection class="q-pa-sm bg-orange-2"> Formulir Ganti Password </QCardSection>
+        <QCardSection class="q-pa-sm bg-orange-2"> Formulir User </QCardSection>
         <q-card-section class="q-pa-sm">
             <form @submit.prevent="onSubmit">
                 <q-input
-                    v-model="inputs.password_current"
+                    v-model="inputs.email"
                     class="q-my-sm"
-                    label="Password Lama"
+                    label="Email"
                     outlined
                     dense
-                    type="password"
+                    type="email"
                 />
                 <q-input
-                    v-model="inputs.password"
+                    v-model="inputs.username"
                     class="q-my-sm"
-                    label="Password Baru"
+                    label="Username"
                     outlined
                     dense
-                    type="password"
+                    type="text"
                 />
-                <q-input
-                    v-model="inputs.password_confirmation"
-                    class="q-my-sm"
-                    label="Ulangi Password Baru"
-                    outlined
-                    dense
-                    type="password"
-                />
+
                 <div class="flex items-center justify-between">
-                    <div class="q-pl-sm">
-                        Anda akan diarahkan ke halaman <strong>login</strong> setelah mengganti
-                        password
-                    </div>
+                    <div class="q-pl-sm">Anda bisa login dengan username atau email</div>
                     <QBtn label="Simpan" no-caps color="orange" type="submit" />
                 </div>
             </form>
@@ -42,15 +32,19 @@
 import User from '@/models/User';
 import { ref } from 'vue';
 
-const inputs = ref({});
+const props = defineProps({
+    user: { type: Object },
+});
+
+const inputs = ref({ ...props.user });
 const emit = defineEmits(['loading', 'success']);
 async function onSubmit() {
     const data = JSON.parse(JSON.stringify(inputs.value));
 
     try {
         emit('loading', true);
-        await User.updateMyPassword(data);
-        emit('success');
+        const response = await User.updateMyProfile(data);
+        emit('success', response?.user);
     } catch (error) {
         console.log('error update password ', error);
     } finally {

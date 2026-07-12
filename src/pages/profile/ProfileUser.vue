@@ -14,34 +14,79 @@
                         <td class="text-italic text-caption">Nama</td>
                         <td>{{ user.name }}</td>
                     </tr>
-
-                    <tr>
-                        <td class="text-italic text-caption">Username</td>
-                        <td>{{ user.username }}</td>
-                    </tr>
                     <tr>
                         <td class="text-italic text-caption">Kelompok Koordinasi</td>
                         <td>{{ user.kelompok }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="text-right">
-                            <q-btn
-                                label="Atur Password"
-                                icon="edit"
-                                no-caps
-                                dense
-                                class="q-px-sm"
-                                color="orange-7"
-                                @click="showPasswordForm = !showPasswordForm"
-                            />
+                        <td class="text-italic text-caption">Email</td>
+                        <td class="flex items-center justify-between">
+                            <div>
+                                {{ user.email }}
+                            </div>
+                            <div>
+                                <q-btn
+                                    icon="edit"
+                                    flat
+                                    no-caps
+                                    dense
+                                    class="q-px-sm"
+                                    color="orange-7"
+                                    @click="
+                                        () => {
+                                            showUserForm = !showUserForm;
+                                            showPasswordForm = false;
+                                        }
+                                    "
+                                />
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-italic text-caption">Username</td>
+                        <td class="">
+                            {{ user.username }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-italic text-caption">Password</td>
+                        <td class="flex items-center justify-between">
+                            <div>***</div>
+                            <div>
+                                <q-btn
+                                    icon="edit"
+                                    flat
+                                    no-caps
+                                    dense
+                                    class="q-px-sm"
+                                    color="orange-7"
+                                    @click="
+                                        () => {
+                                            showPasswordForm = !showPasswordForm;
+                                            showUserForm = false;
+                                        }
+                                    "
+                                />
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </QMarkupTable>
 
-            <QCard v-if="showPasswordForm" flat bordered class="q-my-sm">
-                <PasswordForm @loading="(v) => (loading = v)" @success="onSuccess" />
-            </QCard>
+            <PasswordForm
+                v-if="showPasswordForm"
+                @loading="(v) => (loading = v)"
+                @success="onSuccessPassword"
+                class="q-my-sm"
+            />
+            <UserForm
+                v-if="showUserForm"
+                @loading="(v) => (loading = v)"
+                @success="onSuccessUser"
+                class="q-my-sm"
+                :user="user"
+            />
 
             <q-list bordered separator class="q-mt-sm">
                 <q-item class="q-pa-sm bg-grey-2">
@@ -72,6 +117,7 @@ import { onMounted, ref } from 'vue';
 import User from '@/models/User';
 import LoadingAbsolute from '@/components/LoadingAbsolute.vue';
 import PasswordForm from './PasswordForm.vue';
+import UserForm from './UserForm.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { useRouter } from 'vue-router';
 import CardHeader from '@/components/cards/CardHeader.vue';
@@ -79,6 +125,7 @@ import CardHeader from '@/components/cards/CardHeader.vue';
 const user = ref({});
 const loading = ref(false);
 const showPasswordForm = ref(false);
+const showUserForm = ref(false);
 const router = useRouter();
 
 async function loadData() {
@@ -97,10 +144,14 @@ onMounted(async () => {
     await loadData();
 });
 
-const onSuccess = () => {
+const onSuccessPassword = () => {
     showPasswordForm.value = false;
     useAuthStore().logout();
     router.replace('/login');
+};
+const onSuccessUser = (data) => {
+    showUserForm.value = false;
+    user.value = { ...user.value, ...data };
 };
 </script>
 <style lang=""></style>
