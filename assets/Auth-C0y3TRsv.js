@@ -1,0 +1,1 @@
+import{t as e}from"./Api-CA3qnbIs.js";var t=new class extends e{constructor(){super(),this.defaultConfig()}async login({login:e,password:t}){return(await this.fetchGuest(`login`,{method:`POST`,body:JSON.stringify({login:e,password:t})})).data||!0}async logout(){return(await this.fetchAuth(`logout`,{method:`POST`})).data||!0}};export{t};

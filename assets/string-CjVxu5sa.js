@@ -1,1 +1,0 @@
-function e(e){return!e||typeof e!=`string`?``:e.split(` `).map(e=>e.charAt(0).toUpperCase()+e.slice(1).toLowerCase()).join(` `)}export{e as t};
