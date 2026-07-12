@@ -1,7 +1,7 @@
 <template>
     <q-card class="full-width" style="max-width: 425px">
         <q-form @submit.prevent="onSubmit">
-            <FormHeader :title="'Input Rekening ' + toProperCase(kelompok)" :is-new="!id" />
+            <FormHeader :title="'Input Rekening ' + toProperCase(inputs.kelompok)" :is-new="!id" />
             <LoadingAbsolute v-if="loading" />
 
             <q-card-section class="q-pa-sm">
@@ -63,7 +63,6 @@ import { toProperCase } from '@/utils/string';
 
 const props = defineProps({
     dataInputs: { type: Object },
-    kelompok: { type: String, required: true },
 });
 const emit = defineEmits(['successDelete', 'successSubmit', 'successUpdate', 'successCreate']);
 

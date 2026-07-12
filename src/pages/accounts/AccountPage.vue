@@ -70,7 +70,6 @@
                 @success-update="onUpdate"
                 @success-delete="onDelete"
                 :dataInputs="account"
-                :scope="QKelompok"
             />
         </QDialog>
         <!-- {{ accounts }} -->
