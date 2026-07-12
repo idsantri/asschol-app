@@ -78,7 +78,6 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { toProperCase } from '@/utils/string';
 import ArrayCrud from '@/models/ArrayCrud';
 import AccountForm from '@/components/forms/AccountForm.vue';
 import { useQueryState } from 'vue-url-state';
@@ -95,7 +94,7 @@ const auth = useAuthStore();
 const titlePage = computed(() => {
     const baseTitle = 'Daftar Rekening';
     if (QKelompok.value) {
-        return `${baseTitle}: — ${toProperCase(QKelompok.value)}`;
+        return `${baseTitle}: — ${QKelompok.value}`;
     }
     return baseTitle;
 });

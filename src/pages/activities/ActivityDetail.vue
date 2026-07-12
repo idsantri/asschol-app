@@ -116,7 +116,6 @@ import { useRoute } from 'vue-router';
 import { bacaHijri } from '@/utils/hijri';
 import { formatDate } from '@/utils/date-operation';
 import Activity from '@/models/Activity';
-import { toProperCase } from '@/utils/string';
 import { useRouter } from 'vue-router';
 
 const { params } = useRoute();
@@ -125,7 +124,7 @@ const dialog = ref(false);
 const activity = ref({});
 const loading = ref(false);
 const router = useRouter();
-const titlePage = computed(() => `Detail Kegiatan ${toProperCase(activity.value?.kelompok ?? '')}`);
+const titlePage = computed(() => `Detail Kegiatan ${activity.value?.kelompok ?? ''}`);
 
 onMounted(async () => {
     if (id) await loadData();

@@ -1,7 +1,7 @@
 <template>
     <q-card class="full-width" style="max-width: 425px">
         <q-form @submit.prevent="onSubmit">
-            <FormHeader :title="'Input Rekening ' + toProperCase(inputs.kelompok)" :is-new="!id" />
+            <FormHeader :title="'Input Rekening ' + inputs.kelompok" :is-new="!id" />
             <LoadingAbsolute v-if="loading" />
 
             <q-card-section class="q-pa-sm">
@@ -59,7 +59,6 @@ import { notifyConfirm } from '@/utils/notify';
 import FormHeader from './parts/FormHeader.vue';
 import FormActions from './parts/FormActions.vue';
 import Account from '@/models/Account';
-import { toProperCase } from '@/utils/string';
 
 const props = defineProps({
     dataInputs: { type: Object },

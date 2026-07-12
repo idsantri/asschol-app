@@ -66,7 +66,6 @@ import InputSelectArray from '@/components/forms/inputs/InputSelectArray.vue';
 import Activity from '@/models/Activity';
 import { useAuthStore } from '@/stores/authStore';
 import { formatDate } from '@/utils/date-operation';
-import { toProperCase } from '@/utils/string';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQueryState } from 'vue-url-state';
@@ -84,7 +83,7 @@ const filterText = ref('');
 const titlePage = computed(() => {
     const baseTitle = 'Data Kegiatan';
     if (qKelompok.value) {
-        return `${baseTitle} — ${toProperCase(qKelompok.value)}`;
+        return `${baseTitle} — ${qKelompok.value}`;
     }
     return baseTitle;
 });
