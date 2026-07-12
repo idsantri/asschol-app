@@ -16,10 +16,10 @@
                         <td class="text-italic text-caption q-pr-sm">Nama</td>
                         <td>{{ user.name }}</td>
                     </tr>
-                    <!-- <tr>
+                    <tr>
                         <td class="text-italic text-caption q-pr-sm">Email</td>
                         <td>{{ user.email }}</td>
-                    </tr> -->
+                    </tr>
                     <tr>
                         <td class="text-italic text-caption q-pr-sm">Username</td>
                         <td>{{ user.username }}</td>
