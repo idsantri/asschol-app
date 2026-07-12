@@ -1,1 +1,0 @@
-import{t as e}from"./ApiCrud-DGoJdu_a.js";var t=new class extends e{constructor(){super(`activities`)}};export{t};
