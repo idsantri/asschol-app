@@ -1,0 +1,1 @@
+import{t as e}from"./ApiCrud-CotEKeOp.js";var t=new class extends e{constructor(){super(`activities`)}};export{t};
