@@ -1,0 +1,1 @@
+import{B as e,C as t,et as n,lt as r}from"./QBtn-mo9pw6sT.js";var i=e({name:`QTr`,props:{props:Object,noHover:Boolean},setup(e,{slots:i}){let a=n(()=>`q-tr`+(e.props===void 0||e.props.header?``:` `+e.props.__trClass)+(e.noHover?` q-tr--no-hover`:``));return()=>r(`tr`,{style:e.props?.__trStyle,class:a.value},t(i.default))}});export{i as t};
