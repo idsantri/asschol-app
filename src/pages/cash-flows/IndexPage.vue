@@ -277,6 +277,13 @@ const columns = [
         sortable: true,
     },
     {
+        name: 'catatan',
+        align: 'left',
+        label: 'Catatan',
+        field: 'catatan',
+        sortable: true,
+    },
+    {
         name: 'id',
         align: 'center',
         label: 'Edit',
