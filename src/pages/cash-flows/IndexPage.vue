@@ -7,7 +7,21 @@
             :show-add="true"
             @on-add="handleAdd"
             :disable-add="!account"
-        />
+        >
+            <template #more>
+                <q-list clickable v-close-popup class="text-orange-10">
+                    <q-item clickable="" @click="exportToExcel">
+                        <q-item-section>
+                            <q-item-label>Download</q-item-label>
+                            <q-item-label caption>file excel</q-item-label>
+                        </q-item-section>
+                        <q-item-section avatar>
+                            <q-icon color="orange" name="sym_o_download" />
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </template>
+        </CardHeader>
 
         <q-card-section
             class="q-pa-sm tw:grid tw:grid-cols-1 tw:gap-2 tw:w-full tw:sm:flex tw:sm:items-center tw:sm:justify-between bg-orange-1"
@@ -103,6 +117,7 @@
                 </template>
             </q-table>
         </q-card-section>
+
         <QDialog v-model="dialog">
             <CashFlowForm
                 :dataInputs="cashFlow"
@@ -124,6 +139,9 @@ import { useQueryState } from 'vue-url-state';
 import { useAccountsStore } from '@/stores/accountsStore';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/authStore';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { notifyError } from '@/utils/notify';
 
 const store = useAccountsStore();
 const { accounts, isLoading: loadingAccounts } = storeToRefs(store);
@@ -144,6 +162,58 @@ const titlePage = computed(() => {
     }
     return baseTitle;
 });
+
+const selectedAccount = computed(() => {
+    return accounts.value.find((a) => a.slug == QAccount.value);
+});
+
+const exportToExcel = () => {
+    if (!cashFlows.value?.length) {
+        notifyError('Tidak ada data untuk diekspor!');
+        return;
+    }
+
+    // Buat worksheet BARU (kosong dulu)
+    const worksheet = XLSX.utils.aoa_to_sheet([]);
+
+    // 1. Baris 1 (A1): Judul "Data Arus Kas"
+    XLSX.utils.sheet_add_aoa(worksheet, [[titlePage.value + ': ' + selectedAccount.value?.nama]], {
+        origin: 'A1',
+    });
+
+    // 2. Tambahkan data mulai dari baris 3 (baris 2 untuk header kolom otomatis)
+    //    Map data dulu ke bentuk yang diperlukan
+
+    let No = 1;
+    const mappedData = cashFlows.value.map((item) => ({
+        No: No++,
+        Tanggal: new Date(item.tgl_transaksi),
+        Keterangan: item.keterangan,
+        Masuk: item.masuk,
+        Keluar: item.keluar,
+        Saldo: item.saldo,
+        'Atas Nama': item.atas_nama,
+        Catatan: item.catatan,
+    }));
+
+    // json_to_sheet dengan opsi header dan mulai dari baris 2 (origin A2)
+    XLSX.utils.sheet_add_json(worksheet, mappedData, {
+        origin: 'A2',
+        header: ['No', 'Tanggal', 'Keterangan', 'Masuk', 'Keluar', 'Saldo', 'Atas Nama', 'Catatan'],
+    });
+
+    // Bagian ke-2 agar data di baris 2 tapi dengan jarak 1 baris dari judul:
+    // (opsional) gabungkan judul di baris 1 melintasi kolom
+    worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 7 } }];
+
+    // Buat workbook dan lampirkan
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'CashFlows');
+
+    // Konversi ke binary dan simpan
+    const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'arus-kas.xlsx');
+};
 
 const optionsAccount = computed(() => {
     return accounts.value.filter(
