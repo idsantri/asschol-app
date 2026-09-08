@@ -38,6 +38,13 @@
                     ]"
                     error-color="negative"
                 />
+                <InputSelectArray
+                    v-model="inputs.nama"
+                    url="nama-kegiatan"
+                    label="Nama Kegiatan *"
+                    class="q-my-sm"
+                    :rules="[(val) => !!val || 'Harus diisi!']"
+                />
                 <q-input
                     dense
                     class="q-my-sm"
@@ -47,14 +54,34 @@
                     :rules="[(val) => !!val || 'Harus diisi!']"
                     readonly=""
                 />
-
-                <InputSelectArray
-                    v-model="inputs.nama"
-                    url="nama-kegiatan"
-                    label="Nama Kegiatan *"
+                <q-select
+                    dense
                     class="q-my-sm"
+                    outlined
+                    label="Peserta *"
+                    v-model="inputs.target_peserta"
                     :rules="[(val) => !!val || 'Harus diisi!']"
+                    :options="[
+                        { label: 'Laki-Laki', value: 'L' },
+                        { label: 'Perempuan', value: 'P' },
+                        { label: 'Laki-Laki & Perempuan', value: 'X' },
+                    ]"
+                    emit-value
+                    map-options
+                    behavior="menu"
                 />
+                <q-card bordered flat class="q-px-sm q-my-sm bg-transparent flex items-center">
+                    <div class="q-mr-md text-caption">Publik</div>
+                    <q-toggle
+                        v-model="inputs.public"
+                        color="orange"
+                        :true-value="1"
+                        :false-value="0"
+                        :label="
+                            inputs.public ? 'Publik (antar kelompok)' : 'Privat (internal kelompok)'
+                        "
+                    />
+                </q-card>
                 <q-input
                     dense
                     class="q-my-sm"
@@ -112,7 +139,7 @@ const convertToLocalForInput = (utcString) => {
 
 const loading = ref(false);
 const id = props.dataInputs?.id;
-const inputs = ref({ ...props.dataInputs });
+const inputs = ref({ public: 0, ...props.dataInputs });
 const firstInput = useTemplateRef('firstInput');
 
 onMounted(async () => {

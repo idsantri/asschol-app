@@ -145,14 +145,14 @@ const columns = [
         name: 'nama',
         label: 'Nama Kegiatan',
         align: 'left',
-        field: 'nama',
+        field: (row) => row.nama + (row.target_peserta ? ` (${row.target_peserta})` : ''),
         sortable: true,
     },
     {
         name: 'kelompok',
         label: 'Kelompok',
         align: 'left',
-        field: 'kelompok',
+        field: (row) => row.kelompok + (row.public ? ' (Publik)' : ''),
         sortable: true,
     },
 ];

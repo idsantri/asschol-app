@@ -34,12 +34,34 @@
                         <td>{{ activity.th_ajaran_h }}</td>
                     </tr>
                     <tr>
-                        <td>Nama Kegiatan</td>
+                        <td>Nama</td>
                         <td>{{ activity.nama }}</td>
+                    </tr>
+                    <tr>
+                        <td>Publik</td>
+                        <td>
+                            {{
+                                activity.public
+                                    ? 'Ya (Kegiatan antar kelompok)'
+                                    : 'Tidak (internal kelompok)'
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Kelompok</td>
                         <td>{{ activity.kelompok }}</td>
+                    </tr>
+                    <tr>
+                        <td>Peserta</td>
+                        <td>
+                            {{
+                                activity?.target_peserta?.toUpperCase() == 'L'
+                                    ? 'Laki-Laki'
+                                    : activity?.target_peserta?.toUpperCase() == 'P'
+                                      ? 'Perempuan'
+                                      : 'Laki-Laki & Perempuan'
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Lokasi</td>
