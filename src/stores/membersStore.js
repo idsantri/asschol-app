@@ -5,6 +5,7 @@ export default defineStore('members', {
         members: [],
         filterKelompok: '',
         filterStatus: 'active',
+        filterGender: 'l',
         filterAlamat: '',
         // DataTable pagination state
         datatablePagination: {
@@ -23,8 +24,15 @@ export default defineStore('members', {
                   )
                 : state.members;
 
+            const filteredByGender = filteredByKelompok.filter((item) => {
+                if (state.filterGender === 'all') return true;
+                if (state.filterGender === 'l') return item.sex?.toLowerCase() === 'l';
+                if (state.filterGender === 'p') return item.sex?.toLowerCase() === 'p';
+                return true;
+            });
+
             // Then filter by status
-            const filterByStatus = filteredByKelompok.filter((item) => {
+            const filterByStatus = filteredByGender.filter((item) => {
                 if (state.filterStatus === 'all') return true;
                 if (state.filterStatus === 'active')
                     return item.status_max?.toLowerCase() === 'aktif';
@@ -70,7 +78,12 @@ export default defineStore('members', {
         setStatus(value) {
             this.filterStatus = value;
         },
-
+        setGender(value) {
+            this.filterGender = value;
+        },
+        setAlamat(value) {
+            this.filterAlamat = value;
+        },
         // Actions untuk DataTable pagination
         updatePagination(displayStart, pageLength) {
             const currentPage = Math.floor(displayStart / pageLength) + 1;

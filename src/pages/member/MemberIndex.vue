@@ -37,14 +37,49 @@
                     class="full-width"
                     behavior="menu"
                     clearable=""
-                    style="max-width: 450px"
+                    style="max-width: 425px"
                     dense
                 />
+
                 <q-card
                     bordered
                     flat
                     class="q-px-sm bg-transparent flex items-center justify-between full-width"
-                    style="max-width: 450px"
+                    style="max-width: 425px"
+                >
+                    <div class="text-caption">Gender</div>
+                    <div class="q-gutter-sm">
+                        <q-radio
+                            v-model="filterGender"
+                            val="l"
+                            label="Laki-laki"
+                            color="orange-10"
+                            checked-icon="task_alt"
+                            unchecked-icon="panorama_fish_eye"
+                        />
+                        <q-radio
+                            v-model="filterGender"
+                            val="p"
+                            label="Perempuan"
+                            color="orange-10"
+                            checked-icon="task_alt"
+                            unchecked-icon="panorama_fish_eye"
+                        />
+                        <q-radio
+                            v-model="filterGender"
+                            val="all"
+                            label="Semua"
+                            color="orange-10"
+                            checked-icon="task_alt"
+                            unchecked-icon="panorama_fish_eye"
+                        />
+                    </div>
+                </q-card>
+                <q-card
+                    bordered
+                    flat
+                    class="q-px-sm bg-transparent flex items-center justify-between full-width"
+                    style="max-width: 425px"
                 >
                     <div class="text-caption">Status</div>
                     <div class="q-gutter-sm">
@@ -84,6 +119,7 @@
                 :data="filteredMembers"
                 ref="table"
                 @draw="onDataTableDraw"
+                style="min-width: 1000px"
             />
         </q-card-section>
         <QDialog v-model="dialog">
@@ -115,6 +151,7 @@ const warning = ref(true);
 
 const membersStore = useMembersStore();
 const {
+    filterGender,
     filterKelompok,
     filterStatus,
     filterAlamat,
@@ -230,32 +267,32 @@ const optionsDT = computed(() => ({
     displayStart: getPaginationState.value.displayStart,
     pageLength: getPaginationState.value.pageLength,
     columns: [
-        {
-            title: `
-                <button disabled title="Detail anggota" 
-                    class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--rectangle q-btn--actionable q-focusable q-hoverable q-btn--dense" 
-                    style="color: #f57c00; text-decoration: none;">
-                    <span class="q-focus-helper"></span>
-                    <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-                        <i class="q-icon notranslate material-icons" aria-hidden="true" role="img">info</i>
-                    </span>
-                </button>`,
-            data: null,
-            orderable: false,
-            searchable: false,
-            // width: '60px',
-            render: function (data, type, row) {
-                return `
-                    <a href="/members/${row.id}" data-member-id="${row.id}" title="Detail anggota"
-                        class="btn-member-info q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--rectangle q-btn--actionable q-focusable q-hoverable q-btn--dense" 
-                        style="color: #f57c00; text-decoration: none;">
-                        <span class="q-focus-helper"></span>
-                        <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-                            <i class="q-icon notranslate material-icons" aria-hidden="true" role="img">info</i>
-                        </span>
-                    </a>`;
-            },
-        },
+        // {
+        //     title: `
+        //         <button disabled title="Detail anggota"
+        //             class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--rectangle q-btn--actionable q-focusable q-hoverable q-btn--dense"
+        //             style="color: #f57c00; text-decoration: none;">
+        //             <span class="q-focus-helper"></span>
+        //             <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+        //                 <i class="q-icon notranslate material-icons" aria-hidden="true" role="img">info</i>
+        //             </span>
+        //         </button>`,
+        //     data: null,
+        //     orderable: false,
+        //     searchable: false,
+        //     // width: '60px',
+        //     render: function (data, type, row) {
+        //         return `
+        //             <a href="/members/${row.id}" data-member-id="${row.id}" title="Detail anggota"
+        //                 class="btn-member-info q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--rectangle q-btn--actionable q-focusable q-hoverable q-btn--dense"
+        //                 style="color: #f57c00; text-decoration: none;">
+        //                 <span class="q-focus-helper"></span>
+        //                 <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+        //                     <i class="q-icon notranslate material-icons" aria-hidden="true" role="img">info</i>
+        //                 </span>
+        //             </a>`;
+        //     },
+        // },
         {
             title: 'ID',
             data: 'id',
@@ -266,6 +303,13 @@ const optionsDT = computed(() => ({
         {
             title: 'Nama',
             data: 'nama',
+            render: function (data, type, row) {
+                return `
+                    <a href="/members/${row.id}" data-member-id="${row.id}" title="Detail anggota"
+                        class="btn-member-info" >
+                        ${row.nama} (${row.sex})
+                    </a>`;
+            },
         },
         {
             title: 'Alamat',
@@ -337,7 +381,7 @@ const optionsDT = computed(() => ({
 
 // Watch untuk perubahan filter - validasi pagination
 watch(
-    [filterKelompok, filterStatus, filterAlamat],
+    [filterKelompok, filterStatus, filterAlamat, filterGender],
     () => {
         setTimeout(() => {
             const totalRecords = filteredMembers.value.length;
@@ -380,8 +424,12 @@ function _goToPage(pageNumber) {
 .btn-member-info {
     cursor: pointer;
     transition: all 0.2s ease;
-    display: inline-flex !important;
-    text-align: center !important;
+    color: #f54e00;
+    padding: 6px 6px 6px 0;
+    // border-radius: 4px;
+    // border: 1px solid #e0e0e0;
+    //    display: inline-flex !important;
+    //   text-align: center !important;
 
     &:hover {
         background-color: rgba(245, 124, 0, 0.1);

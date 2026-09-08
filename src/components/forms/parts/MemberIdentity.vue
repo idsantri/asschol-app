@@ -26,6 +26,21 @@
         error-color="negative"
         autocapitalize="words"
     />
+    <q-select
+        dense
+        class="q-my-sm"
+        outlined
+        label="Jenis Kelamin *"
+        v-model="inputs.sex"
+        :options="[
+            { label: 'Laki-laki', value: 'L' },
+            { label: 'Perempuan', value: 'P' },
+        ]"
+        :rules="[(val) => !!val || 'Harus diisi!']"
+        emit-value
+        map-options
+        behavior="menu"
+    />
     <q-input
         dense
         hint=""

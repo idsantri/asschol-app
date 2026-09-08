@@ -25,7 +25,10 @@
                 </tr>
                 <tr>
                     <td>Nama</td>
-                    <td>{{ anggota.nama }}</td>
+                    <td>
+                        {{ anggota.nama }} (<span class="text-weight-bold">{{ anggota.sex }}</span
+                        >)
+                    </td>
                 </tr>
                 <tr>
                     <td>Kelahiran</td>
