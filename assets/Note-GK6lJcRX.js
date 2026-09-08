@@ -1,1 +1,0 @@
-import{t as e}from"./ApiCrud-B9vQ4e76.js";var t=new class extends e{constructor(){super(`notes`)}};export{t};

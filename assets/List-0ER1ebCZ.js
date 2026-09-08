@@ -1,1 +1,0 @@
-import{t as e}from"./ApiCrud-B9vQ4e76.js";var t=new class extends e{constructor(e){super(e),this.path=`lists`}async getByKey(e){return this.setNotifyGet(),(await this.fetchGuest(`${this.path}/${e}`,{method:`GET`})).data||!0}};export{t};
